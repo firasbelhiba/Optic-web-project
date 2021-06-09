@@ -1,0 +1,16 @@
+{
+  "name": "optic-shop",
+  "version": "1.0.0",
+  "description": "This is the backend part of the project",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Firas Belhiba & Ghada Khedri",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
