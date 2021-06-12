@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
       //   images: req.body.images,
       //   brand: req.body.brand,
       //   price: req.body.price,
-         category: req.body.category,
+      category: req.body.category,
       //   rating: req.body.rating,
       //   isFeatured: req.body.isFeatured,
       //   countInSock: req.body.countInSock,
@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
 //@access Public
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find().sort({ date: -1 });
+    const products = await Product.find().sort({ date: -1 }).populate("category");
     res.json(products);
   } catch (error) {
     console.error(error.message);
@@ -104,7 +104,27 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     console.error(error.message);
     if (error.kind === "ObjectId") {
-      return res.status(404).json({ message: "Post not Found " });
+      return res.status(404).json({ message: "Product not Found " });
+    }
+    res.status(500).send("Server error");
+  }
+});
+
+//@route GET api/products/:id
+//@desc Get by id product
+//@access Public
+
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).populate("category");;
+    res.json(product);
+    if (!product) {
+      return res.status(404).json({ message: "Product not Found " });
+    }
+  } catch (error) {
+    console.error(error.message);
+    if (error.kind === "ObjectId") {
+      return res.status(404).json({ message: "Product not Found " });
     }
     res.status(500).send("Server error");
   }
