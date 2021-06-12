@@ -1,12 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product");
+const Category = require("../models/Category");
 
 //@route POST api/products/
 //@desc add product
 //@access Private
 router.post("/", async (req, res) => {
   try {
+    const category=await Category.findById(req.body.category);
+    if(!category){
+      return res.status(400).send("Invalid category");
+    }
     const newProduct = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -14,7 +19,7 @@ router.post("/", async (req, res) => {
       //   images: req.body.images,
       //   brand: req.body.brand,
       //   price: req.body.price,
-      //   category: req.body.category,
+         category: req.body.category,
       //   rating: req.body.rating,
       //   isFeatured: req.body.isFeatured,
       //   countInSock: req.body.countInSock,
