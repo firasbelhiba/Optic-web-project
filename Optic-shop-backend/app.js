@@ -22,6 +22,7 @@ connectDB();
 // Define routes
 app.use(`${api}/products`, require("./routes/products"));
 app.use(`${api}/categories`, require("./routes/categories"));
+app.use(`${api}/users`, require("./routes/users"));
 
 app.listen(5000, () => {
   console.log("server is running on port 5000");
