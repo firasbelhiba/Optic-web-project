@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-const bcrypt =require("bcryptjs")
+const bcrypt =require("bcryptjs");
+const jwt = require ("jsonwebtoken");
 
 
 //@route GET api/users
@@ -64,7 +65,31 @@ router.delete("/:id", async (req, res) => {
     }
   });
 
+//@route POST api/users/login
+//@desc login user
+//@access Public
+router.post("/login",async (req,res)=>{
+    try {
+        const user = await User.findOne({email : req.body.email});
+        if(!user){
+            res.status(400).send("Invalid parameters !")
+        }
+        if(user && bcrypt.compareSync(req.body.password,user.password)){
+            const token = jwt.sign({
+                userId:user.id,
+            },"secret");
+            res.status(200).send({user : user.email,token:token});
+        }
+        else{
+            res.status(400).send("Invalid password!")
+        }
 
+        
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).send("Server error");
+    }
+})
 
 
 module.exports = router;
